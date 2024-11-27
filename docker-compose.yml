@@ -1,0 +1,19 @@
+version: '3.9'
+services:
+  bamboo:
+    container_name: atlas-bamboo
+    image: atlassian/bamboo-server:9.4-ubuntu
+    volumes:
+      - atlassian-bamboo-volume:/var/atlassian/application-data/bamboo
+    ports:
+      - "8085:8085"
+      - "54663:54663"
+    environment:
+      - ATL_PROXY_NAME=bamboo.internal
+      - ATL_PROXY_PORT=80
+      - ATL_TOMCAT_SCHEME=http
+      - JVM_MAXIMUM_MEMORY=1g
+      - SET_PERMISSIONS=false
+    depends_on:
+      - postgres
+      - pgadmin
