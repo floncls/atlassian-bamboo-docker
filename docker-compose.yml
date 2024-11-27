@@ -1,15 +1,13 @@
-version: '3.9'
 services:
   bamboo:
-    container_name: atlas-bamboo
+    container_name: bamboo
     image: atlassian/bamboo-server:9.4-ubuntu
+    ports:
+      - "8085:8085"   # Expose le port 8085 (au lieu de 32769)
     volumes:
       - atlassian-bamboo-volume:/var/atlassian/application-data/bamboo
-    ports:
-      - "8085:8085"
-      - "54663:54663"
     environment:
-      - ATL_PROXY_NAME=bamboo.internal
+      - ATL_PROXY_NAME=bamboo.localhost
       - ATL_PROXY_PORT=80
       - ATL_TOMCAT_SCHEME=http
       - JVM_MAXIMUM_MEMORY=1g
@@ -17,3 +15,72 @@ services:
     depends_on:
       - postgres
       - pgadmin
+      - traefik
+    networks:
+      - bamboo
+    labels:
+      - "traefik.http.routers.bamboo.rule=Host(`bamboo.localhost`)"
+  postgres:
+    container_name: atlassian-postgres
+    image: postgres:12.22
+    volumes:
+      - atlassian-postgres-volume:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"  # Exposer le port PostgreSQL
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - traefik
+    networks:
+      - bamboo
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:latest
+    volumes:
+      - atlassian-pgadmin-volume:/var/lib/pgadmin
+    depends_on:
+      - postgres
+      - traefik
+    ports:
+      - "5050:5050"  # Exposer le port de pgAdmin
+    environment:
+      - SERVER_PROXY_NAME=pgadmin.localhost
+      - SERVER_PROXY_PORT=80
+      - PGADMIN_LISTEN_PORT=5050
+      - SERVER_SCHEME=http
+      - PGADMIN_DEFAULT_EMAIL=pgadmin@pgadmin.localhost
+      - PGADMIN_DEFAULT_PASSWORD=pgadmin
+    networks:
+      - bamboo
+    labels:
+      - "traefik.http.routers.pgadmin.rule=Host(`pgadmin.localhost`)"
+
+  traefik:
+    image: "traefik:v3.2"
+    container_name: "traefik"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - bamboo
+
+
+volumes:
+  atlassian-pgadmin-volume:
+    driver: local
+  atlassian-postgres-volume:
+    driver: local
+  atlassian-bamboo-volume:
+    driver: local
+
+networks:
+  bamboo:
+    driver: bridge
+
