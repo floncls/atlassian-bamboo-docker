@@ -3,7 +3,7 @@ services:
     container_name: bamboo
     image: atlassian/bamboo-server:9.4-ubuntu
     ports:
-      - "8085:8085"   # Expose le port 8085 (au lieu de 32769)
+      - "8085:8085"
     volumes:
       - atlassian-bamboo-volume:/var/atlassian/application-data/bamboo
     environment:
@@ -26,7 +26,7 @@ services:
     volumes:
       - atlassian-postgres-volume:/var/lib/postgresql/data
     ports:
-      - "5432:5432"  # Exposer le port PostgreSQL
+      - "5432:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -44,7 +44,7 @@ services:
       - postgres
       - traefik
     ports:
-      - "5050:5050"  # Exposer le port de pgAdmin
+      - "5050:5050"
     environment:
       - SERVER_PROXY_NAME=pgadmin.localhost
       - SERVER_PROXY_PORT=80
