@@ -15,5 +15,5 @@
 ## Managing configuration with API 
 ### Fetching a plan configuration from a Bamboo Project
 * Use the script `fetch_plan.py` in order to do so
-* Make sure to generate your Token via Bamboo GUI,  go to Profile > Personal access token > Click on generate access token and used it to the through the script
+* Make sure to generate your Token via Bamboo GUI:  Go to Profile > Personal access token > Click on generate access token > Use it to the through the script
 * Make sure to justify the correct Project and Plan name
