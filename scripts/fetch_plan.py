@@ -43,19 +43,25 @@ def save_yaml_to_file(yaml_data, folder_path, base_name):
 
 
 def main():
-    url = 'http://localhost:8085/rest/api/latest/plan/TEST-TEST'
+    url = 'http://localhost:8085/rest/api/latest/plan/TEST-TEST/specs?format=yaml'
     headers = {
-        'Authorization': 'Bearer <YOUR_TOKEN>>',
+        'Authorization': 'Bearer <>',
         'Accept': 'application/json'
     }
 
     data_json = fetch_data_from_api(url, headers)
     yaml_output = convert_json_to_yaml(data_json)
 
-    folder_path = 'bamboo_export'
-    base_name = 'plan_config'
+    parsed_yaml = yaml.safe_load(yaml_output)
+    if "spec" in parsed_yaml and "code" in parsed_yaml["spec"]:
+        raw_code = parsed_yaml["spec"]["code"]
+        formatted_code = raw_code.replace("\\n", "\n")
+        parsed_yaml["spec"]["code"] = formatted_code
+        folder_path = '../bamboo_export'
+        base_name = 'plan_config'
 
-    save_yaml_to_file(yaml_output, folder_path, base_name)
+        save_yaml_to_file(formatted_code, folder_path, base_name)
+
 
 
 if __name__ == "__main__":
