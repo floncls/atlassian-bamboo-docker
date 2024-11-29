@@ -1,0 +1,42 @@
+expand: actions,stages,branches,variableContext
+projectKey: TEST
+projectName: test
+project:
+  key: TEST
+  name: test
+  description: test
+  link:
+    href: http://bamboo.localhost/rest/api/latest/project/TEST
+    rel: self
+description: test
+shortName: test
+buildName: test
+shortKey: TEST
+type: chain
+enabled: false
+link:
+  href: http://bamboo.localhost/rest/api/latest/plan/TEST-TEST
+  rel: self
+isFavourite: false
+isActive: false
+isBuilding: false
+averageBuildTimeInSeconds: 0.0
+actions:
+  size: 8
+  start-index: 0
+  max-result: 8
+stages:
+  size: 1
+  start-index: 0
+  max-result: 1
+branches:
+  size: 0
+  start-index: 0
+  max-result: 0
+variableContext:
+  size: 1
+  max-results: 1
+key: TEST-TEST
+name: test - test
+planKey:
+  key: TEST-TEST
