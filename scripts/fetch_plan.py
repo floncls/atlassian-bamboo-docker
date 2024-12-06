@@ -3,8 +3,7 @@ import yaml
 import os
 from datetime import datetime
 
-
-def fetch_data_from_api(url, headers):
+def fetch_plan_data_from_api(url, headers):
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()
@@ -19,10 +18,14 @@ def fetch_data_from_api(url, headers):
 def convert_json_to_yaml(json_data):
     try:
         yaml_data = yaml.dump(json_data, default_flow_style=False, allow_unicode=True, sort_keys=False)
+        parsed_yaml = yaml.safe_load(yaml_data)
+        if "spec" in yaml and "code" in parsed_yaml["spec"]:
+            raw_code = parsed_yaml["spec"]["code"]
+            formatted_code = raw_code.replace("\\n", "\n")
+            parsed_yaml["spec"]["code"] = formatted_code
         return yaml_data
     except Exception as e:
         print(f"Error during JSON to YAML conversion: {e}")
-    return None
 
 
 def save_yaml_to_file(yaml_data, folder_path, base_name):
@@ -43,14 +46,15 @@ def save_yaml_to_file(yaml_data, folder_path, base_name):
 
 
 def main():
-    url = 'http://localhost:8085/rest/api/latest/plan/TEST-TEST/specs?format=yaml'
     headers = {
         'Authorization': 'Bearer <>',
         'Accept': 'application/json'
     }
-
-    data_json = fetch_data_from_api(url, headers)
-    yaml_output = convert_json_to_yaml(data_json)
+    """
+    print("fetching plan data from API")
+    url = 'http://localhost:8085/rest/api/latest/plan/TEST-TEST/specs?format=yaml'
+    plan_json = fetch_plan_data_from_api(url, headers)
+    yaml_output = convert_json_to_yaml(plan_json)
 
     parsed_yaml = yaml.safe_load(yaml_output)
     if "spec" in parsed_yaml and "code" in parsed_yaml["spec"]:
@@ -61,6 +65,7 @@ def main():
         base_name = 'plan_config'
 
         save_yaml_to_file(formatted_code, folder_path, base_name)
+    """
 
 
 
