@@ -50,3 +50,10 @@ You can use it by using Python in a terminal as shown below:
 python3 fetch_all_plans.py
 ```
 Follow the instructions and provide the correct informations.
+
+# Generating Excel sheeting for global analysis and pattern analysis
+## Good to know
+For privacy reasons, I have deleted some values on several lists involving URLs and plugins.  You must fill them yourself to make the script work tailored with your expectations
+
+## How to execute
+Running the script is made by executing the main.py.  You can still test all the functions independantly.

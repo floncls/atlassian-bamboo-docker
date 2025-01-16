@@ -1,3 +1,5 @@
 .idea
 .vscode
 bamboo_export/*
+scripts/kpi_output/*
+scripts/analysis_output/*
