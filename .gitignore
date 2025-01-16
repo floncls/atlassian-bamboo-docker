@@ -3,3 +3,5 @@
 bamboo_export/*
 scripts/kpi_output/*
 scripts/analysis_output/*
+__pycache__
+scripts/__pycache__/
